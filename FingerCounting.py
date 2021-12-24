@@ -17,7 +17,7 @@ mpDraw=mp.solutions.drawing_utils
 ptime=0
 ctime=0
 cx2,cy2=0,0
-cx4,cy4=0,0
+cx3,cy3=0,0
 cx6,cy6=0,0
 cx8,cy8=0,0
 cx12,cy12=0,0
@@ -40,8 +40,6 @@ for imPath in myList:
 tipIds=[4,8,12,16,20]
 while True:
     sucess,img=cap.read()
-    h,w,c=overlayList[0].shape
-    img[0:h,0:w]=overlayList[0]
     imgRGB=cv.cvtColor(img,cv.COLOR_BGR2RGB)
     results=hands.process(imgRGB)
     #print(results.multi_hand_landmarks)
@@ -52,51 +50,72 @@ while True:
                 h,w,c=img.shape
                 cx,cy=int(lm.x*w),int(lm.y*h)
                 #print(id,cx,cy)
-                #if id==4:
-                   #cx4,cy4=cx,cy
-                #if id==2:
-                    #cx2,cy2=cx,cy
+                if id==3:
+                   cx3,cy3=cx,cy
+                if id==2:
+                    cx2,cy2=cx,cy
+                    if cx3>cx2:
+                        output=1
+                    else:
+                        output=0
                 if id==6:
                     cx6,cy6=cx,cy
                 if id==8:
                     cx8, cy8 = cx, cy
                     if cy8<cy6:
-                        fingers.append(1)
-                        break
+                        output1=1
                     else:
-                        fingers.append(0)
-                        break
+                        output1=0
                 if id==10:
                     cx10,cy10=cx,cy
                 if id==12:
                     cx12,cy12=cx,cy
                     if cy12<cy10:
-                        fingers.append(1)
-                        break
+                        output2 = 1
                     else:
-                        fingers.append(0)
-                        break
+                        output2 = 0
                 if id==14:
                     cx14,cy14=cx,cy
                 if id==16:
                     cx16,cy16=cx,cy
                     if cy16<cy14:
-                        fingers.append(1)
-                        break
+                        output3 = 1
                     else:
-                        fingers.append(0)
-                        break
+                        output3 = 0
                 if id==18:
                     cx18,cy18=cx,cy
                 if id==20:
                     cx20,cy20=cx,cy
                     if cy20<cy18:
-                        fingers.append(1)
-                        break
+                        output4 = 1
                     else:
-                        fingers.append(0)
-                        break
-        print(fingers)
+                        output4 = 0
+        if output==1:
+            fingers.insert(0,1)
+        else:
+            fingers.insert(0,0)
+        if output1==1:
+            fingers.insert(1,1)
+        else:
+            fingers.insert(1,0)
+        if output2==1:
+            fingers.insert(2,1)
+        else:
+            fingers.insert(2,0)
+        if output3 ==1:
+            fingers.insert(3,1)
+        else:
+            fingers.insert(3,0)
+        if output4==1:
+            fingers.insert(4,1)
+        else:
+            fingers.insert(4,0)
+        #print(fingers[:5])
+        final=fingers[:5]
+        totalFingers=final.count(1)
+        print(totalFingers)
+        #h, w, c = overlayList[0].shape
+        #img[0:h, 0:w] = overlayList[totalFingers]
         mpDraw.draw_landmarks(img,handLms,mpHands.HAND_CONNECTIONS)
             # the first value in () is where do we  want to put the results
             # and second for when we have multiple hands
@@ -106,6 +125,7 @@ while True:
     ptime=ctime
     cv.putText(img,str(int(fps)),(400,70),cv.FONT_HERSHEY_PLAIN,3,(255,0,255),3)
     cv.imshow("Images",img)
+    #print(fingers)
     if cv.waitKey(10)==ord("q"):
         break
 cv.destroyWindow()
