@@ -20,7 +20,7 @@ while True:
         for id,lm in enumerate(faceLms.landmark):
             ih,iw,ic=img.shape
             x,y=int(lm.x*iw),int(lm.y*ih)
-            cv.circle(img,(x,y),1,(0,255,0),thickness=1)
+            #cv.circle(img,(x,y),1,(0,255,0),thickness=1)
             print(id,x,y)
     cTime=time.time()
     fps=1/(cTime-pTime)
