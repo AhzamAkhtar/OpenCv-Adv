@@ -113,7 +113,7 @@ while True:
         #print(fingers[:5])
         final=fingers[:5]
         totalFingers=final.count(1)
-        print(totalFingers)
+        print(final)
         #h, w, c = overlayList[0].shape
         #img[0:h, 0:w] = overlayList[totalFingers]
         mpDraw.draw_landmarks(img,handLms,mpHands.HAND_CONNECTIONS)
